@@ -243,11 +243,13 @@
             document.getElementById('labelDueñaActual').innerText = `Dueña: ${localStorage.getItem('sesionNikoleActiva')}`;
         });
 
-        function cerrarSesionDueña() {
-            localStorage.removeItem('sesionNikoleActiva');
-            alert("Has cerrado sesión del panel de administración.");
-            location.reload(); 
-        }
+     function cerrarSesionDueña() {
+    // 1. Borramos el estado de la sesión activa
+    localStorage.removeItem('sesionNikoleActiva');
+    
+    // 2. Redirigimos al archivo login.html y detenemos la ejecución aquí
+    window.location.href = 'login.html';
+}
 
         let productos = JSON.parse(localStorage.getItem('productosNikole')) || [
             { id: 1, nombre: "Clásico Rojo Fresas", desc: "Suave crema de queso sobre base crujiente y mermelada de fresas.", precio: "2.00", img: "img/fresas.jpeg", likes: 0, comentarios: [] },
