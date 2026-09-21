@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Admin - Nikole's Kake & Cream</title>
+    <style>
+        :root {
+            --color-dorado: #D4AF37;
+            --color-cafe: #4A3B32;
+            --color-fondo: #FDFBF7;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-fondo);
+            color: var(--color-cafe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(74, 59, 50, 0.1);
+            border: 2px solid var(--color-dorado);
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+        .login-card h2 { color: var(--color-cafe); margin-top: 0; }
+        .form-group { margin-bottom: 1.2rem; text-align: left; }
+        .form-group label { display: block; margin-bottom: 0.3rem; font-weight: bold; font-size: 0.9rem; }
+        .form-group input { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .btn {
+            background-color: var(--color-dorado);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        .btn:hover { background-color: #B38F27; }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <h2>Panel de Control de la Propietaria</h2>
+        <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Nikole's Kake & Cream</p>
+        <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">¡Bienvenida Nikole! Ingresa tus datos para acceder al panel</p>
+        
+        <form onsubmit="iniciarSesionLibre(event)">
+            <div class="form-group">
+                <label>Usuario:</label>
+                <input type="text" id="usuario" placeholder="Ingrese su usuario" required>
+            </div>
+            <div class="form-group">
+                <label>Contraseña:</label>
+                <input type="password" id="contrasena" placeholder="Ingrese su contraseña" required>
+            </div>
+            <button type="submit" class="btn">Iniciar Acceso</button>
+        </form>
+    </div>
+
+    <script>
+        function iniciarSesionLibre(event) {
+            event.preventDefault(); // Evita que la página se recargue de golpe
+            
+            // Guarda una marca de sesión activa y redirige automáticamente al admin
+            localStorage.setItem('sesionNikoleActiva', 'true');
+            window.location.href = 'web_dueno.html';
+        }
+    </script>
+</body>
+</html>
