@@ -238,7 +238,6 @@
         window.addEventListener('DOMContentLoaded', () => {
             const sesionDueña = localStorage.getItem('sesionNikoleActiva');
             if (!sesionDueña) {
-                // Si no hay sesión activa, puedes redirigir a un login de admin o inicializarla automáticamente si se desea
                 localStorage.setItem('sesionNikoleActiva', 'Administradora');
             }
             document.getElementById('labelDueñaActual').innerText = `Dueña: ${localStorage.getItem('sesionNikoleActiva')}`;
