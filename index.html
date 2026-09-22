@@ -3,42 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Control - Nikole's Kake & Cream</title>
+    <title>Nikole's Kake & Cream</title>
     <style>
-        /* Pantalla de Intro (2 segundos) */
-        #intro-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--color-cafe);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            color: var(--color-dorado);
-            animation: fadeOut 0.5s ease 1.8s forwards;
-        }
-        #intro-screen img {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            border: 3px solid var(--color-dorado);
-            object-fit: cover;
-            margin-bottom: 1rem;
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(0.95); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(0.95); }
-        }
-        @keyframes fadeOut {
-            to { opacity: 0; visibility: hidden; }
-        }
-
         :root {
             --color-dorado: #D4AF37;
             --color-cafe: #4A3B32;
@@ -53,7 +19,39 @@
             padding: 0;
         }
 
-        /* Barra superior de la dueña autenticada */
+        /* Modal / Pantalla de Autenticación de Cliente */
+        #auth-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(74, 59, 50, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        .auth-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            border: 2px solid var(--color-dorado);
+            text-align: center;
+        }
+        .auth-card h2 { color: var(--color-cafe); margin-top: 0; }
+        .auth-card img { width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--color-dorado); object-fit: cover; margin-bottom: 1rem; }
+        .auth-form-group { margin-bottom: 1rem; text-align: left; }
+        .auth-form-group label { display: block; margin-bottom: 0.3rem; font-weight: bold; font-size: 0.9rem; }
+        .auth-form-group input { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .auth-btn { background-color: var(--color-dorado); color: white; border: none; padding: 0.75rem; width: 100%; border-radius: 5px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 0.5rem; }
+        .auth-btn:hover { background-color: #B38F27; }
+        .switch-auth { margin-top: 1rem; font-size: 0.85rem; color: #666; cursor: pointer; text-decoration: underline; }
+
+        /* Barra superior del cliente autenticado */
         .user-bar {
             background-color: var(--color-dorado);
             color: white;
@@ -81,7 +79,7 @@
             background-color: var(--color-cafe);
             color: var(--color-dorado);
             text-align: center;
-            padding: 2rem;
+            padding: 2.5rem;
             border-bottom: 4px solid var(--color-dorado);
             position: relative;
         }
@@ -89,222 +87,272 @@
             position: absolute;
             top: 15px;
             left: 20px;
-            width: 130px;
-            height: 130px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
             border: 2px solid var(--color-dorado);
             object-fit: cover;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
-        header h1 { margin: 0; font-size: 2rem; }
-        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
-        
-        .admin-card {
+        header h1 { margin: 0; font-size: 2.5rem; letter-spacing: 2px; }
+        header p { font-style: italic; color: #fff; margin-top: 0.5rem; }
+
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .card {
             background: white;
-            padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(74, 59, 50, 0.1);
-            border: 2px dashed var(--color-dorado);
-            margin-bottom: 2rem;
+            overflow: hidden;
+            border: 1px solid #E6DCCD;
+            display: flex;
+            flex-direction: column;
         }
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
+        .card-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            background-color: var(--color-crema);
         }
+        .card-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-content h3 { margin-top: 0; color: var(--color-cafe); }
+        .price { font-size: 1.3rem; font-weight: bold; color: var(--color-dorado); margin: 0.5rem 0; }
         .btn {
             background-color: var(--color-dorado);
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
+            padding: 0.75rem 1rem;
             border-radius: 5px;
             cursor: pointer;
             width: 100%;
             font-weight: bold;
             font-size: 1rem;
+            margin-top: 0.5rem;
         }
         .btn:hover { background-color: #B38F27; }
-
-        .product-stats-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            border: 1px solid #E6DCCD;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
-        }
-        .admin-product-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 8px;
-            object-fit: cover;
-            border: 2px solid var(--color-dorado);
-            flex-shrink: 0;
-            background-color: var(--color-crema);
-        }
-        .admin-product-info {
-            flex-grow: 1;
-        }
-        .stats-header {
+        
+        .social-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 0.8rem;
-            margin-bottom: 0.8rem;
+            margin-top: 1rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid #eee;
         }
-        .stats-badges {
-            display: flex;
-            gap: 15px;
-            font-weight: bold;
-            font-size: 0.95rem;
-        }
-        .badge-likes { color: #d9534f; }
-        .badge-comments { color: var(--color-cafe); }
-        .comment-box {
-            background: #faf8f5;
-            padding: 0.5rem 0.8rem;
-            border-radius: 4px;
-            margin-top: 5px;
-            font-size: 0.85rem;
-            border-left: 3px solid var(--color-dorado);
-        }
-        .btn-delete {
-            background-color: #d9534f;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+        .btn-like { background: none; border: none; color: #d9534f; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
+        .btn-share { background: none; border: none; color: #0275d8; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
+        
+        .comments-section { margin-top: 1rem; background: #faf8f5; padding: 0.8rem; border-radius: 6px; font-size: 0.9rem; }
+        .comments-list { max-height: 90px; overflow-y: auto; margin-bottom: 0.5rem; font-size: 0.85rem; }
+        .comment-item { margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px; }
+        .comment-input-group { display: flex; gap: 5px; }
+        .comment-input-group input { flex-grow: 1; padding: 4px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.85rem; }
+        .comment-input-group button { padding: 4px 8px; background: var(--color-cafe); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+
+        .order-card { background: white; padding: 2rem; border-radius: 12px; border: 2px solid var(--color-dorado); max-width: 700px; margin: 0 auto; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.3rem; font-weight: bold; }
+        .form-group input, .form-group textarea { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-    <div id="intro-screen">
-        <img src="img/logokikole.png" alt="Logo Nikole's Kake & Cream">
-        <h2>Nikole's Kake & Cream</h2>
-        <p style="font-style: italic; color: #fff;">"Bienvenidos al mundo dulce de Nikole, postres dulces y suaves en cada porción"</p>
+    <!-- Ventana flotante de Inicio de Sesión / Registro del Cliente -->
+    <div id="auth-modal">
+        <div class="auth-card">
+            <img src="img/logokikole.png" alt="Logo">
+            <h2 id="auth-title">Iniciar Sesión</h2>
+            <form id="authForm" onsubmit="manejarAutenticacion(event)">
+                <div class="auth-form-group">
+                    <label>Nombre de Usuario:</label>
+                    <input type="text" id="authUsuario" required placeholder="Ej. MariaGomez">
+                </div>
+                <div class="auth-form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="authPassword" required placeholder="Tu contraseña secreta">
+                </div>
+                <button type="submit" class="auth-btn" id="authBtnSubmit">Entrar a la Tienda</button>
+            </form>
+            <div class="switch-auth" id="switchAuthMode" onclick="alternarModoRegistro()">¿No tienes cuenta? Regístrate aquí</div>
+        </div>
     </div>
 
-    <!-- Barra superior de la dueña -->
+    <!-- Barra superior para mostrar el usuario activo -->
     <div class="user-bar">
-        <span id="labelDueñaActual">Dueña: Nikole (Administración)</span>
-        <button onclick="cerrarSesionDueña()">Cerrar Sesión</button>
+        <span id="labelUsuarioActual">Cliente: Invitado</span>
+        <button onclick="cerrarSesionCliente()">Cerrar Sesión</button>
     </div>
 
     <header>
         <img src="img/logokikole.png" alt="Logo" class="logo-esquina">
-        <h1>Panel de Control de la Dueña 👑</h1>
-        <p>Nikole's Kake & Cream</p>
+        <h1>Nikole's Kake & Cream</h1>
+        <p>"Bienvenidos al mundo dulce de Nikole, postres dulces y suaves en cada porción"</p>
     </header>
 
     <div class="container">
-        <div class="admin-card">
-            <h2>Agregar Nuevo Producto a la Tienda</h2>
-            <form id="addProductForm" onsubmit="agregarNuevoProducto(event)">
+        <h2 style="text-align: center; color: var(--color-cafe); margin-bottom: 2rem;">Postres que puedes deleitar</h2>
+        
+        <div class="menu-grid" id="clientMenuGrid"></div>
+
+        <div class="order-card">
+            <h2 style="color: var(--color-cafe); margin-top: 0; text-align: center;">Finalizar Pedido</h2>
+            <form id="orderForm" onsubmit="enviarPedido(event)">
                 <div class="form-group">
-                    <label>Nombre del Postre:</label>
-                    <input type="text" id="nombreProd" required placeholder="Ej. Cheesecake de Maracuyá">
+                    <label>Producto Seleccionado:</label>
+                    <input type="text" id="productoSeleccionado" readonly value="Haz clic en 'Pedir este' en tu cheesecake favorito">
                 </div>
                 <div class="form-group">
-                    <label>Descripción:</label>
-                    <textarea id="descProd" required placeholder="Detalles de ingredientes..."></textarea>
+                    <label>Sugerencias / Detalles especiales:</label>
+                    <textarea id="sugerencias" rows="2" placeholder="Escribe aquí tus peticiones especiales..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Precio ($):</label>
-                    <input type="text" id="precioProd" required placeholder="Ej. 2.00">
+                    <label>Nombres y Apellidos:</label>
+                    <input type="text" id="nombres" required placeholder="Tu nombre completo">
                 </div>
                 <div class="form-group">
-                    <label>Ruta o Enlace de la Foto (ej. img/nombre.jpeg):</label>
-                    <input type="text" id="imgProd" required placeholder="img/foto.jpeg">
+                    <label>Teléfono:</label>
+                    <input type="tel" id="telefono" required placeholder="Tu número celular">
                 </div>
-                <button type="submit" class="btn">Publicar Producto</button>
+                <div class="form-group">
+                    <label>Dirección de Entrega:</label>
+                    <input type="text" id="direccion" required placeholder="Calle y número">
+                </div>
+                <div class="form-group">
+                    <label>Correo Personal:</label>
+                    <input type="email" id="correo" required placeholder="tucorreo@gmail.com">
+                </div>
+                <button type="submit" class="btn" style="background-color: var(--color-cafe);">Enviar Pedido por WhatsApp</button>
             </form>
         </div>
-
-        <h2 style="color: var(--color-cafe);">Métricas y Comentarios de los Clientes</h2>
-        <div id="adminStatsList"></div>
     </div>
 
     <script>
-        // Verificación de sesión de la dueña
+        let esModoRegistro = false;
+
+        // Comprobar si ya hay una sesión activa en este navegador
         window.addEventListener('DOMContentLoaded', () => {
-            const sesionDueña = localStorage.getItem('sesionNikoleActiva');
-            if (!sesionDueña) {
-                localStorage.setItem('sesionNikoleActiva', 'Administradora');
+            const sesionActiva = localStorage.getItem('sesionClienteActiva');
+            if (sesionActiva) {
+                document.getElementById('auth-modal').style.display = 'none';
+                document.getElementById('labelUsuarioActual').innerText = `Conectada como: ${sesionActiva}`;
             }
-            document.getElementById('labelDueñaActual').innerText = `Dueña: ${localStorage.getItem('sesionNikoleActiva')}`;
         });
 
-     function cerrarSesionDueña() {
-    // 1. Borramos el estado de la sesión activa
-    localStorage.removeItem('sesionNikoleActiva');
-    
-    // 2. Redirigimos al archivo login.html y detenemos la ejecución aquí
-    window.location.href = 'login.html';
-}
+        function alternarModoRegistro() {
+            esModoRegistro = !esModoRegistro;
+            const titulo = document.getElementById('auth-title');
+            const boton = document.getElementById('authBtnSubmit');
+            const switchText = document.getElementById('switchAuthMode');
 
-        let productos = JSON.parse(localStorage.getItem('productosNikole')) || [
+            if (esModoRegistro) {
+                titulo.innerText = "Crear Cuenta de Cliente";
+                boton.innerText = "Registrarse y Entrar";
+                switchText.innerText = "¿Ya tienes una cuenta? Inicia sesión aquí";
+            } else {
+                titulo.innerText = "Iniciar Sesión";
+                boton.innerText = "Entrar a la Tienda";
+                switchText.innerText = "¿No tienes cuenta? Regístrate aquí";
+            }
+        }
+
+        function manejarAutenticacion(event) {
+            event.preventDefault();
+            const usuarioInput = document.getElementById('authUsuario').value.trim();
+            const passInput = document.getElementById('authPassword').value.trim();
+
+            // Base de datos local de usuarios registrados
+            let usuariosRegistrados = JSON.parse(localStorage.getItem('cuentasClientesNikole')) || {};
+
+            if (esModoRegistro) {
+                // Modo Registro
+                if (usuariosRegistrados[usuarioInput]) {
+                    alert("⚠️ Este nombre de usuario ya está registrado. Por favor elige otro o inicia sesión.");
+                    return;
+                }
+                // Guardar usuario y contraseña
+                usuariosRegistrados[usuarioInput] = passInput;
+                localStorage.setItem('cuentasClientesNikole', JSON.stringify(usuariosRegistrados));
+                
+                // Iniciar sesión automáticamente
+                localStorage.setItem('sesionClienteActiva', usuarioInput);
+                alert(`¡Cuenta creada con éxito! Bienvenida, ${usuarioInput}`);
+            } else {
+                // Modo Login
+                if (!usuariosRegistrados[usuarioInput] || usuariosRegistrados[usuarioInput] !== passInput) {
+                    alert("❌ Usuario o contraseña incorrectos. Verifica tus datos o regístrate si no tienes cuenta.");
+                    return;
+                }
+                // Credenciales correctas
+                localStorage.setItem('sesionClienteActiva', usuarioInput);
+            }
+
+            // Ocultar modal y actualizar barra superior
+            document.getElementById('auth-modal').style.display = 'none';
+            document.getElementById('labelUsuarioActual').innerText = `Conectada como: ${usuarioInput}`;
+            document.getElementById('authForm').reset();
+        }
+
+        function cerrarSesionCliente() {
+            localStorage.removeItem('sesionClienteActiva');
+            location.reload(); // Recarga la página para mostrar el login de nuevo
+        }
+
+        // Carga de productos
+        const productosIniciales = [
             { id: 1, nombre: "Clásico Rojo Fresas", desc: "Suave crema de queso sobre base crujiente y mermelada de fresas.", precio: "2.00", img: "img/fresas.jpeg", likes: 0, comentarios: [] },
             { id: 2, nombre: "Maracuyá Passion", desc: "El balance perfecto entre la acidez de la fruta y la dulzura de la crema.", precio: "2.00", img: "img/maracuya.jpeg", likes: 0, comentarios: [] },
             { id: 3, nombre: "Limon Fiesta", desc: "Una delicia entre la dulce crema y el toque de limón para alegrar tus días.", precio: "2.00", img: "img/limon.jpeg", likes: 0, comentarios: [] },
             { id: 4, nombre: "Mora Lover", desc: "Amor en cada paladar de la dulce mora junto con la dulce crema.", precio: "2.00", img: "img/mora.jpeg", likes: 0, comentarios: [] }
         ];
 
-        function sincronizar() {
+        let productos = JSON.parse(localStorage.getItem('productosNikole'));
+        if (!productos || productos.length === 0) {
+            productos = productosIniciales;
             localStorage.setItem('productosNikole', JSON.stringify(productos));
-            renderizarPanelAdmin();
         }
 
-        function renderizarPanelAdmin() {
-            const container = document.getElementById('adminStatsList');
-            container.innerHTML = '';
-
-            if (productos.length === 0) {
-                container.innerHTML = '<p>No hay productos activos en este momento.</p>';
-                return;
-            }
+        function renderizarClientMenu() {
+            const grid = document.getElementById('clientMenuGrid');
+            grid.innerHTML = '';
 
             productos.forEach((p, index) => {
+                let imgStyle = p.img ? `background-image: url('${p.img}');` : '';
                 let comentariosHTML = '';
-                if (p.comentarios && p.comentarios.length > 0) {
-                    p.comentarios.forEach(c => {
-                        let usuarioComentario = c.usuario ? `<strong>${c.usuario}:</strong>` : '<strong>Cliente:</strong>';
-                        let textoComentario = c.texto ? c.texto : c;
-                        comentariosHTML += `<div class="comment-box">💬 ${usuarioComentario} "${textoComentario}"</div>`;
+                if(p.comentarios && p.comentarios.length > 0) {
+                    p.comentarios.forEach(c => { 
+                        comentariosHTML += `<div class="comment-item"><strong>${c.usuario}:</strong> ${c.texto}</div>`; 
                     });
-                } else {
-                    comentariosHTML = `<div style="color: #888; font-size: 0.85rem; margin-top: 5px;">Aún no hay comentarios de este producto.</div>`;
                 }
 
-                container.innerHTML += `
-                    <div class="product-stats-card">
-                        <img src="${p.img}" alt="${p.nombre}" class="admin-product-img" onerror="this.src='img/logokikole.png'">
-                        
-                        <div class="admin-product-info">
-                            <div class="stats-header">
-                                <div>
-                                    <strong style="font-size: 1.1rem; color: var(--color-cafe);">${p.nombre}</strong> - <span style="color: var(--color-dorado); font-weight:bold;">$${p.precio}</span><br>
-                                    <small style="color: #666;">${p.desc}</small>
+                grid.innerHTML += `
+                    <div class="card">
+                        <div class="card-img" style="${imgStyle}"></div>
+                        <div class="card-content">
+                            <div>
+                                <h3>${p.nombre}</h3>
+                                <p>${p.desc}</p>
+                                <div class="price">$${p.precio}</div>
+                            </div>
+                            <div>
+                                <button class="btn" onclick="seleccionarProducto('${p.nombre} - $${p.precio}')">Pedir este</button>
+                                
+                                <div class="social-actions">
+                                    <button class="btn-like" onclick="darLike(${index})">❤️ ${p.likes || 0} Me gusta</button>
+                                    <button class="btn-share" onclick="compartir('${p.nombre}')">🔗 Compartir</button>
                                 </div>
-                                <button class="btn-delete" onclick="eliminarProducto(${index})">Eliminar Producto</button>
-                            </div>
-                            
-                            <div class="stats-badges">
-                                <span class="badge-likes">❤️ ${p.likes || 0} Me gusta</span>
-                                <span class="badge-comments">💬 ${p.comentarios ? p.comentarios.length : 0} Comentarios</span>
-                            </div>
 
-                            <div style="margin-top: 10px;">
-                                <strong>Comentarios y peticiones de clientes:</strong>
-                                ${comentariosHTML}
+                                <div class="comments-section">
+                                    <div class="comments-list">${comentariosHTML || '<span style="color:#888;">Sin comentarios aún</span>'}</div>
+                                    <div class="comment-input-group">
+                                        <input type="text" id="comentario-${index}" placeholder="Escribe un comentario o nota...">
+                                        <button onclick="agregarComentario(${index})">Enviar</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -312,32 +360,78 @@
             });
         }
 
-        function agregarNuevoProducto(event) {
-            event.preventDefault();
-            const nuevo = {
-                id: Date.now(),
-                nombre: document.getElementById('nombreProd').value,
-                desc: document.getElementById('descProd').value,
-                precio: document.getElementById('precioProd').value,
-                img: document.getElementById('imgProd').value,
-                likes: 0,
-                comentarios: []
-            };
-
-            productos.push(nuevo);
-            sincronizar();
-            document.getElementById('addProductForm').reset();
-            alert('¡Nuevo cheesecake agregado y publicado en la tienda de los clientes!');
+        function darLike(index) {
+            productos[index].likes = (productos[index].likes || 0) + 1;
+            localStorage.setItem('productosNikole', JSON.stringify(productos));
+            renderizarClientMenu();
         }
 
-        function eliminarProducto(index) {
-            if (confirm('¿Estás segura de eliminar este cheesecake? Se borrará de la tienda de los clientes.')) {
-                productos.splice(index, 1);
-                sincronizar();
+        function agregarComentario(index) {
+            const usuarioActivo = localStorage.getItem('sesionClienteActiva');
+            if (!usuarioActivo) {
+                alert("Debes iniciar sesión para comentar.");
+                return;
+            }
+
+            const input = document.getElementById(`comentario-${index}`);
+            const texto = input.value.trim();
+            if(texto) {
+                if(!productos[index].comentarios) productos[index].comentarios = [];
+                // Se guarda el comentario vinculado exactamente al usuario logueado
+                productos[index].comentarios.push({
+                    usuario: usuarioActivo,
+                    texto: texto
+                });
+                localStorage.setItem('productosNikole', JSON.stringify(productos));
+                input.value = '';
+                renderizarClientMenu();
             }
         }
 
-        renderizarPanelAdmin();
+        function compartir(nombreProducto) {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Nikole\'s Kake & Cream',
+                    text: `¡Mira este delicioso postre de ${nombreProducto} en Nikole's Kake & Cream!`,
+                    url: window.location.href
+                }).catch(() => {});
+            } else {
+                alert(`¡Enlace copiado para compartir el cheesecake: ${nombreProducto}!`);
+            }
+        }
+
+        function seleccionarProducto(info) {
+            document.getElementById('productoSeleccionado').value = info;
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        function enviarPedido(event) {
+            event.preventDefault();
+            const producto = document.getElementById('productoSeleccionado').value;
+            const sugerencias = document.getElementById('sugerencias').value;
+            const nombres = document.getElementById('nombres').value;
+            const telefono = document.getElementById('telefono').value;
+            const direccion = document.getElementById('direccion').value;
+            const correo = document.getElementById('correo').value;
+
+            if (producto.includes("Haz clic")) {
+                alert("Por favor selecciona un producto primero.");
+                return;
+            }
+
+            const mensaje = `Hola Nikole, ¡quiero hacer un pedido!%0A` +
+                            `- *Producto:* ${producto}%0A` +
+                            `- *Sugerencias:* ${sugerencias || 'Ninguna'}%0A` +
+                            `- *Cliente:* ${nombres}%0A` +
+                            `- *Teléfono:* ${telefono}%0A` +
+                            `- *Dirección:* ${direccion}%0A` +
+                            `- *Correo:* ${correo}`;
+
+            const telefonoDueña = "593939829176"; 
+            window.open(`https://wa.me/${telefonoDueña}?text=${mensaje}`, '_blank');
+        }
+
+        renderizarClientMenu();
     </script>
 </body>
 </html>
