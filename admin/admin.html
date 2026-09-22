@@ -280,7 +280,8 @@
             localStorage.removeItem('sesionNikoleActiva');
             localStorage.removeItem('sesionExpiracionNikole');
             alert("Has cerrado sesión del panel de forma segura.");
-            location.reload(); 
+            // Esto recarga el archivo actual limpiando cualquier error de ruta
+            window.location.href = "admin.html"; 
         }
 
         let productos = JSON.parse(localStorage.getItem('productosNikole')) || [
