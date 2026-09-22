@@ -192,24 +192,19 @@
             const fechaExpiracion = localStorage.getItem('sesionExpiracionNikole');
             const ahora = new Date().getTime();
 
-            // Verificamos si la sesión sigue vigente (menos de 30 días)
             if (sesionActiva && fechaExpiracion && ahora < parseInt(fechaExpiracion)) {
-                // Sesión válida: Ocultamos el bloqueo y dejamos entrar a la dueña
                 document.getElementById('auth-overlay').style.display = 'none';
                 document.getElementById('labelDueñaActual').innerText = `Dueña: ${sesionActiva}`;
             } else {
-                // Si expiró o no hay sesión, limpiamos cualquier residuo de sesión vieja
                 localStorage.removeItem('sesionNikoleActiva');
                 localStorage.removeItem('sesionExpiracionNikole');
 
                 if (!cuentaAdminCreada) {
-                    // Primera vez: Registro de la cuenta de la dueña
                     document.getElementById('intro-screen').style.display = 'none';
                     document.getElementById('auth-titulo').innerText = "Crea tu cuenta 👑";
-                    document.getElementById('auth-subtitulo').innerText = "Define tu usuario y contraseña de administración (Acceso exclusivo):";
+                    document.getElementById('auth-subtitulo').innerText = "Define tu usuario y contraseña de administración:";
                     document.getElementById('btnAuthAccion').innerText = "Registrar y Entrar";
                 } else {
-                    // Inicio de sesión normal (Los clientes que entren aquí verán esto y no podrán pasar sin la contraseña)
                     document.getElementById('intro-screen').style.display = 'none';
                     document.getElementById('auth-titulo').innerText = "Panel Protegido 👑";
                     document.getElementById('auth-subtitulo').innerText = "Área exclusiva para la administración. Ingresa tus datos:";
@@ -224,20 +219,18 @@
             const claveIngresada = document.getElementById('inputClave').value.trim();
             
             const cuentaGuardada = JSON.parse(localStorage.getItem('credencialesAdminNikole'));
-            const treintaDiasEnMilisegundos = 30 * 24 * 60 * 60 * 1000; // 30 días exactos
+            const treintaDiasEnMilisegundos = 30 * 24 * 60 * 60 * 1000;
             const tiempoExpiracion = new Date().getTime() + treintaDiasEnMilisegundos;
 
             if (!cuentaGuardada) {
-                // REGISTRO INICIAL
                 const nuevaCuenta = { usuario: usuarioIngresado, clave: claveIngresada };
                 localStorage.setItem('credencialesAdminNikole', JSON.stringify(nuevaCuenta));
                 localStorage.setItem('sesionNikoleActiva', usuarioIngresado);
                 localStorage.setItem('sesionExpiracionNikole', tiempoExpiracion);
                 
-                alert("¡Cuenta de administración creada con éxito! Tu acceso estará activo por 30 días.");
-                location.reload();
+                alert("¡Cuenta de administración creada con éxito!");
+                window.location.href = "admin.html";
             } else {
-                // VALIDACIÓN DE ACCESO (Evita que clientes entren)
                 if (usuarioIngresado === cuentaGuardada.usuario && claveIngresada === cuentaGuardada.clave) {
                     localStorage.setItem('sesionNikoleActiva', usuarioIngresado);
                     localStorage.setItem('sesionExpiracionNikole', tiempoExpiracion);
@@ -249,7 +242,6 @@
             }
         }
 
-        // Función para que la dueña pueda actualizar/cambiar su usuario y contraseña cuando pasen los 30 días o cuando guste
         function cambiarCredenciales() {
             const claveActualVerificacion = prompt("Para actualizar tus credenciales, introduce tu contraseña actual:");
             const cuentaGuardada = JSON.parse(localStorage.getItem('credencialesAdminNikole'));
@@ -262,17 +254,16 @@
                     const cuentaActualizada = { usuario: nuevoUsuario.trim(), clave: nuevaClave.trim() };
                     localStorage.setItem('credencialesAdminNikole', JSON.stringify(cuentaActualizada));
                     
-                    // Extiende la vigencia 30 días más con los nuevos datos
                     const treintaDiasEnMilisegundos = 30 * 24 * 60 * 60 * 1000;
                     localStorage.setItem('sesionExpiracionNikole', new Date().getTime() + treintaDiasEnMilisegundos);
                     
-                    alert("✅ ¡Credenciales actualizadas con éxito! Tu sesión se ha renovado por 30 días más.");
-                    location.reload();
+                    alert("✅ ¡Credenciales actualizadas con éxito!");
+                    window.location.href = "admin.html";
                 } else {
                     alert("Operación cancelada. Los campos no pueden estar vacíos.");
                 }
             } else {
-                alert("❌ Contraseña incorrecta. No se pudo realizar el cambio.");
+                alert("❌ Contraseña incorrecta.");
             }
         }
 
@@ -280,15 +271,13 @@
             localStorage.removeItem('sesionNikoleActiva');
             localStorage.removeItem('sesionExpiracionNikole');
             alert("Has cerrado sesión del panel de forma segura.");
-            // Esto recarga el archivo actual limpiando cualquier error de ruta
-            window.location.href = "admin.html"; 
+            window.location.href = "admin.html";
         }
 
         let productos = JSON.parse(localStorage.getItem('productosNikole')) || [
             { id: 1, nombre: "Clásico Rojo Fresas", desc: "Suave crema de queso sobre base crujiente y mermelada de fresas.", precio: "2.00", img: "img/fresas.jpeg", likes: 0, comentarios: [] },
             { id: 2, nombre: "Maracuyá Passion", desc: "El balance perfecto entre la acidez de la fruta y la dulzura de la crema.", precio: "2.00", img: "img/maracuya.jpeg", likes: 0, comentarios: [] },
             { id: 3, nombre: "Limon Fiesta", desc: "Una delicia entre la dulce crema y el toque de limón para alegrar tus días.", precio: "2.00", img: "img/limon.jpeg", likes: 0, comentarios: [] },
-            $
             { id: 4, nombre: "Mora Lover", desc: "Amor en cada paladar de la dulce mora junto con la dulce crema.", precio: "2.00", img: "img/mora.jpeg", likes: 0, comentarios: [] }
         ];
 
@@ -352,7 +341,7 @@
                 id: Date.now(),
                 nombre: document.getElementById('nombreProd').value,
                 desc: document.getElementById('descProd').value,
-                precio: document.getElementById('precioProd'].value,
+                precio: document.getElementById('precioProd').value,
                 img: document.getElementById('imgProd').value,
                 likes: 0,
                 comentarios: []
